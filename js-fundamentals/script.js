@@ -52,7 +52,7 @@ for (let i = 0; i < 3; i++) {
 // Coding challenge #1.4
 const bill = [275, 40, 430];
 
-for (let obj of bill) {
+for (const obj of bill) {
   const tip = obj >= 50 && obj <= 300 ? obj * 0.15 : obj * 0.2;
 
   console.log(
@@ -85,7 +85,7 @@ checkWinner(scoreDolphins, scoreKoalas);
 // Coding challenge #2.2 (extends 1.4 challenge)
 const calcTip = bill => (bill >= 50 && bill <= 300 ? bill * 0.15 : bill * 0.2);
 
-for (let obj of bill) {
+for (const obj of bill) {
   const tip = calcTip(obj);
 
   console.log(
