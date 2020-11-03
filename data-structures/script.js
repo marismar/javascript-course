@@ -129,6 +129,8 @@ for (const [minutes, event] of gameEvents) {
 document.body.append(document.createElement('textarea'));
 document.body.append(document.createElement('button'));
 
+document.querySelector('button').textContent = 'OK';
+
 document.querySelector('button').addEventListener('click', function () {
   const text = document.querySelector('textarea').value;
   const rows = text.split('\n');
