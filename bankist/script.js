@@ -58,10 +58,27 @@ const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
 // Functions
-const displayMovements = function (movements) {
+const createUsername = function (accounts) {
+  // Create username for each account
+  accounts.forEach(account => {
+    account.username = account.owner
+      .toLowerCase()
+      .split(' ')
+      .map(name => name[0])
+      .join('');
+  });
+};
+
+const updateUI = function (account) {
+  displayMovements(account);
+  calcDisplayBalance(account);
+  calcDiplaySummary(account);
+};
+
+const displayMovements = function (account) {
   containerMovements.innerHTML = ''; // Clear all data of movements
 
-  movements.forEach((item, index) => {
+  account.movements.forEach((item, index) => {
     const type = item > 0 ? 'deposit' : 'withdrawal';
 
     const html = `
@@ -73,26 +90,17 @@ const displayMovements = function (movements) {
       </div>
     `;
 
-    containerMovements.insertAdjacentHTML('beforeend', html);
+    containerMovements.insertAdjacentHTML('afterbegin', html);
   });
 };
 
-const createUsername = function (accounts) {
-  accounts.forEach(account => {
-    account.username = account.owner
-      .toLowerCase()
-      .split(' ')
-      .map(name => name[0])
-      .join('');
-  });
-};
-
-const calcDisplayBalance = function (movements) {
-  const balance = movements.reduce(
-    (acumulator, movement) => acumulator + movement
+const calcDisplayBalance = function (account) {
+  account.balance = account.movements.reduce(
+    (acumulator, movement) => acumulator + movement,
+    0
   );
 
-  labelBalance.textContent = `${balance}€`;
+  labelBalance.textContent = `${account.balance}€`;
 };
 
 const calcDiplaySummary = function (account) {
@@ -133,14 +141,56 @@ btnLogin.addEventListener('click', event => {
       currentAccount.owner.split(' ')[0]
     }`;
 
-    displayMovements(currentAccount.movements);
-    calcDisplayBalance(currentAccount.movements);
-    calcDiplaySummary(currentAccount);
-
-    containerApp.style.opacity = 100;
-
-    // Clear login inputs
     inputLoginPin.value = inputLoginUsername.value = '';
     inputLoginPin.blur();
+
+    updateUI(currentAccount);
+
+    containerApp.style.opacity = 100;
+  }
+});
+
+btnTransfer.addEventListener('click', event => {
+  event.preventDefault();
+
+  const amount = Number(inputTransferAmount.value);
+  const receiveAccount = accounts.find(
+    account => account.username === inputTransferTo.value
+  );
+
+  if (
+    amount > 0 &&
+    receiveAccount &&
+    currentAccount.balance >= amount &&
+    receiveAccount.username !== currentAccount.username
+  ) {
+    receiveAccount.movements.push(amount);
+    currentAccount.movements.push(-amount);
+
+    updateUI(currentAccount);
+
+    inputTransferAmount.value = inputTransferTo.value = '';
+  }
+});
+
+btnClose.addEventListener('click', event => {
+  event.preventDefault();
+
+  if (
+    inputCloseUsername.value === currentAccount.username &&
+    Number(inputClosePin.value) === currentAccount.pin
+  ) {
+    // Delete account
+    accounts.splice(
+      accounts.findIndex(
+        account => account.username === currentAccount.username
+      ),
+      1
+    );
+
+    // Hide UI
+    containerApp.style.opacity = 0;
+    inputCloseUsername.value = inputClosePin.value = '';
+    labelWelcome.textContent = 'Log in to get started';
   }
 });
