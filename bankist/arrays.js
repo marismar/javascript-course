@@ -42,7 +42,7 @@ const checkDogs = function (dogsJulia, dogsKate) {
   return dogs;
 };
 
-const dogs = checkDogs([3, 5, 2, 12, 7], [4, 1, 15, 8, 3]);
+let dogs = checkDogs([3, 5, 2, 12, 7], [4, 1, 15, 8, 3]);
 
 // Exercise #2
 const eurToUsd = 1.1;
@@ -87,3 +87,79 @@ const totalDepositsUSD = movements
   .reduce((acc, movement) => acc + movement, 0);
 
 console.log(totalDepositsUSD);
+
+// Exercise #6
+const condition = movement => movement > 0;
+
+console.log(movements.includes(-130));
+console.log(movements.some(movement => movement > 0));
+console.log(movements.every(condition));
+
+// Exercise #7
+const arr = [[7, -524, -2, 14], [12, -21, -74], 12, 23];
+console.log(arr.flat());
+
+// Exercise #8
+const owners = ['Jonas', 'Marismar', 'Mirele', 'Ana'];
+console.log(owners.sort());
+
+console.log(movements.slice().sort((a, b) => a - b)); //Ascending order
+console.log(movements.slice().sort((a, b) => b - a)); //Descending order
+
+// Exercise #9
+console.log([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+console.log(new Array(7).fill(23, 2, 6));
+console.log(Array.from({ length: 7 }, (item, index) => index + 1));
+// Array.from() also can use to convert Maps and Sets to Arrays
+
+// Coding challenge #4
+dogs = [
+  { weight: 22, currentFood: 250, owners: ['Alice', 'Bob'] },
+  { weight: 8, currentFood: 200, owners: ['Matilda'] },
+  { weight: 13, currentFood: 275, owners: ['Sarah', 'John'] },
+  { weight: 32, currentFood: 340, owners: ['Michael'] },
+];
+
+// Calculate the amount of recommended food for each dog
+dogs.forEach(
+  dog => (dog.recommendedFood = Math.trunc(dog.weight ** 0.75 * 28))
+);
+
+// Check and print if Sarah's dog is eating too much or too little
+const sarahsDog = dogs.find(dog => dog.owners.includes('Sarah'));
+console.log(
+  `Sarah's dog is eating too ${
+    sarahsDog.currentFood >= sarahsDog.recommendedFood ? 'much 🔺' : 'little 🔻'
+  }`
+);
+
+const ownersEatTooMuch = dogs
+  .filter(dog => dog.currentFood > 1.1 * dog.recommendedFood)
+  .flatMap(dog => dog.owners);
+
+const ownersEatTooLittle = dogs
+  .filter(dog => dog.currentFood < 0.9 * dog.recommendedFood)
+  .flatMap(dog => dog.owners);
+
+console.log(`${ownersEatTooMuch.join(' and ')} dogs eat too much 🔺`);
+console.log(`${ownersEatTooLittle.join(' and ')} dogs eat too little 🔻`);
+
+const checkEatingOkay = dog =>
+  dog.currentFood <= 1.1 * dog.recommendedFood &&
+  dog.currentFood >= 0.9 * dog.recommendedFood;
+
+console.log(
+  `There's ${
+    dogs.some(checkEatingOkay) ? 'some' : 'no'
+  } dogs eating an OKAY the amount of food that is recommended!`
+);
+
+console.log(
+  `There's ${
+    dogs.some(dog => dog.currentFood === dog.recommendedFood) ? 'some' : 'no'
+  } dogs eating EXACTLY the amount of food that is recommended!`
+);
+
+// Sort a copy of dogs by recommended food portion in an ascending order
+console.log(dogs.slice().sort((a, b) => a.recommendedFood - b.recommendedFood));
+console.log(dogs.filter(checkEatingOkay));
