@@ -70,15 +70,17 @@ const createUsername = function (accounts) {
 };
 
 const updateUI = function (account) {
-  displayMovements(account);
+  displayMovements(account.movements);
   calcDisplayBalance(account);
   calcDiplaySummary(account);
 };
 
-const displayMovements = function (account) {
+const displayMovements = function (movements, sort = false) {
   containerMovements.innerHTML = ''; // Clear all data of movements
+  // Create a copy of movements and sort it
+  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
 
-  account.movements.forEach((item, index) => {
+  movs.forEach((item, index) => {
     const type = item > 0 ? 'deposit' : 'withdrawal';
 
     const html = `
@@ -127,6 +129,7 @@ createUsername(accounts);
 
 // Event handler
 let currentAccount;
+let sorted = false;
 
 btnLogin.addEventListener('click', event => {
   event.preventDefault(); // Prevent form from submitting
@@ -193,4 +196,40 @@ btnClose.addEventListener('click', event => {
     inputCloseUsername.value = inputClosePin.value = '';
     labelWelcome.textContent = 'Log in to get started';
   }
+});
+
+btnLoan.addEventListener('click', event => {
+  event.preventDefault();
+
+  const amount = Number(inputLoanAmount.value);
+
+  amount > 0 &&
+    currentAccount.movements.some(movement => movement >= 0.1 * amount) &&
+    currentAccount.movements.push(amount);
+
+  updateUI(currentAccount);
+
+  inputLoanAmount.value = '';
+});
+
+btnSort.addEventListener('click', event => {
+  event.preventDefault();
+  displayMovements(currentAccount.movements, !sorted);
+  sorted = !sorted;
+});
+
+// Aditional
+const overalBalance = accounts
+  .flatMap(account => account.movements)
+  .reduce((acumulator, movement) => acumulator + movement, 0);
+
+console.log(overalBalance);
+
+labelBalance.addEventListener('click', function () {
+  const movementsUI = Array.from(
+    document.querySelectorAll('.movements__value'),
+    el => Number(el.textContent.replace('€', ''))
+  );
+
+  console.log(movementsUI);
 });
