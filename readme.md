@@ -13,3 +13,6 @@ Futhermore, the following applications were developed throughout the course:
 <img src=".github/pig-game.png"></img>
 
 ## Bankist
+
+<img src=".github/bankist-app.png"></img>
+<img src=".github/bankist-web.png"></img>
