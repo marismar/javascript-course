@@ -14,5 +14,5 @@ Futhermore, the following applications were developed throughout the course:
 
 ## Bankist
 
-<img src=".github/bankist-app.png"></img>
 <img src=".github/bankist-web.png"></img>
+<img src=".github/bankist-app.png"></img>
