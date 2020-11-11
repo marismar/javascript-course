@@ -16,3 +16,7 @@ Futhermore, the following applications were developed throughout the course:
 
 <img src=".github/bankist-web.png"></img>
 <img src=".github/bankist-app.png"></img>
+
+## Mapty
+
+<img src=".github/mapty.png"></img>
