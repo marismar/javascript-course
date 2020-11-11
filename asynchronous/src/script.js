@@ -4,6 +4,7 @@ const btn = document.querySelector('.btn-country');
 const countriesContainer = document.querySelector('.countries');
 
 const renderCountry = function (data, className = '') {
+  console.log(data);
   const html = `
     <article class="country ${className}">
       <img class="country__img" src="${data.flag}" />
@@ -111,5 +112,32 @@ const getCountryData = function (country) {
 };
 
 btn.addEventListener('click', function () {
-  getCountryData('australia');
+  getCountryData('brazil');
 });
+
+// Coding challenge #1
+const whereAmI = function (lat, lng) {
+  fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`)
+    .then(response => {
+      if (!response.ok)
+        throw new Error(`Problem with geocoding (${response.status})`);
+      return response.json();
+    })
+    .then(data => {
+      console.log(data);
+      console.log(`You are in ${data.city}, ${data.country}`);
+
+      return fetch(`https://restcountries.eu/rest/v2/name/${data.country}`);
+    })
+    .then(response => {
+      if (!response.ok)
+        throw new Error(`Country not found (${response.status})`);
+
+      return response.json();
+    })
+    .then(data => renderCountry(...data))
+    .catch(err => renderError(`${err.message} 💥💥`))
+    .finally(() => (countriesContainer.style.opacity = 1));
+};
+
+whereAmI(52.508, 13.381);
