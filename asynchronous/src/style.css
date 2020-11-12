@@ -46,7 +46,7 @@ body {
 }
 
 .neighbour::before {
-  content: "Neighbour country";
+  content: 'Neighbour country';
   width: 100%;
   position: absolute;
   top: -4rem;
@@ -99,6 +99,7 @@ body {
 }
 
 .btn-country {
+  margin-top: 4.2rem;
   border: none;
   font-size: 2rem;
   padding: 2rem 5rem;
